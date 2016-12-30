@@ -19,10 +19,17 @@ This module made of [WebModule](https://github.com/uupaa/WebModule).
 
     // VOD example
     var spooler = new M3U8Spooler({
+        autoStart: true,
         spoolThreshold: 1,
-        spoolCallback: function(duration) {
-            var chunk = spooler.use(duration); // { tsIDs:UIN32Array, tsInfos:TSInfoObjectArray, tsBlobs:BlobArray, chunkDurations:UINT32 }
-            console.info(spooler.state);
+        spoolCallback: function(cachedDurations) { // @arg UINT32
+            var chunk = spooler.use(cachedDurations); // { tsIDs:UIN32Array, tsInfos:TSInfoObjectArray, tsBlobs:BlobArray, chunkDurations:UINT32 }
+            console.info(spooler.state); // { info: String, totalDurations:UINT32, cachedDurations:UINT32, connections:UINT8 }
+            // -> {
+            //   info: "UUUUUbLFFFNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN",
+            //   totalDurations:  596456,
+            //   cachedDurations: 0,
+            //   connections:     1,
+            // }
             spooler.used(chunk.tsIDs);
         },
         errorCallback: function(error, url, code) {
@@ -30,21 +37,21 @@ This module made of [WebModule](https://github.com/uupaa/WebModule).
             test.done(miss());
         },
         m3u8Callback: function(url, m3u8, playlist, master) {
+          //console.log("m3u8Callback", url, m3u8, playlist, master);
         },
         tsCallback: function(id, url, blob) {
             console.log("tsCallback", id, url, blob.size || blob.byteLength);
         },
         endCallback: function() {
             console.info(spooler.state);
-            var ok = /[Uu]/.test(spooler.state.state); // all media segment used
-
+            // -> {
+            //   info: "UUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUu",
+            //   totalDurations:  596456,
+            //   cachedDurations: 0,
+            //   connections:     0,
+            // }
             spooler.stop();
             spooler.clear();
-            if (ok) {
-                test.done(pass());
-            } else {
-                test.done(miss());
-            }
         },
     });
 
