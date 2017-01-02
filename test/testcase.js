@@ -41,12 +41,12 @@ function testM3U8Spooler_VOD(test, pass, miss) {
         autoStart: true,
         m3u8FetchIntervalRatio: 0.1,
         spoolThreshold: 1,
-        spoolCallback: function(cachedDurations) { // @arg UINT32
+        updateCallback: function(cachedDurations) { // @arg UINT32
             var chunk = spooler.use(cachedDurations); // { tsIDs:UIN32Array, tsInfos:TSInfoObjectArray, tsBlobs:BlobArray, chunkDurations:UINT32 }
 //          console.info("CHUNK", chunk);
-            console.info(spooler.state); // { info: String, totalDurations:UINT32, cachedDurations:UINT32, connections:UINT8 }
+            console.info(spooler.state); // { queue: String, totalDurations:UINT32, cachedDurations:UINT32, connections:UINT8 }
             // -> {
-            //   info: "UUUUUbLFFFNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN",
+            //   queue: "UUUUUbLFFFNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN",
             //   totalDurations:  596456,
             //   cachedDurations: 0,
             //   connections:     1,
@@ -66,12 +66,12 @@ function testM3U8Spooler_VOD(test, pass, miss) {
         endCallback: function() {
             console.info(spooler.state);
             // -> {
-            //   info: "UUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUu",
+            //   queue: "UUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUu",
             //   totalDurations:  596456,
             //   cachedDurations: 0,
             //   connections:     0,
             // }
-            var ok = /[Uu]/.test(spooler.state.info); // all media segment used
+            var ok = /[Uu]/.test(spooler.state.queue); // all media segment used
 
             spooler.stop();
             spooler.clear();
