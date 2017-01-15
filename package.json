@@ -1,6 +1,6 @@
 {
   "name": "uupaa.m3u8spooler.js",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "M3U8 Spooler",
   "url": "https://github.com/uupaa/M3U8Spooler.js",
   "keywords": ["M3U8", "HLS", "uupaa", "WebModule", "Unstable"],
